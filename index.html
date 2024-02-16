@@ -1,0 +1,65 @@
+<html>
+  <head>
+  </head>
+  <body>
+    <script type="application/javascript">
+        const lightColors = {
+            body: '#fbfbfe',
+            container: '#ffffff',
+            border: '#eff3f5',
+            text: '#697477',
+            mainText: '#000',
+            principal: '#1083d6',
+        };
+        const darkColors = {
+            body: '#192229',
+            container: '#212e36',
+            border: '#2a3b47',
+            text: '#c8cdd0',
+            mainText: '#eff3f5',
+            principal: '#52a5e0',
+
+        };
+        let isDarkMode = false;
+        const header = document.createElement('header');
+        const main = document.createElement('main');
+        const footer = document.createElement('footer');
+        const body = document.body;
+        header.innerHTML = '<h1>Arpanetos Chat</h1>';
+        main.innerHTML = '';
+        footer.innerHTML = '<h1>Footer</h1>';
+        header.style = 'height: 10%; width:100%; text-align: center; ';
+        body.style = 'margin: 0; padding: 0; display: flex; flex-direction: column; align-items:center; justify-content: space-between; height: 100vh;';
+        main.style = 'display: flex; justify-content: center; align-items: center; height: 50%; width:50%; border: 5px solid; border-radius: 10px; margin: 10px;';
+        footer.style = 'height: 10%; width:100%; text-align: center;';
+        document.body.appendChild(header);
+        document.body.appendChild(main);
+        document.body.appendChild(footer);
+
+
+        function applyTheme(colors) {
+            body.style.backgroundColor = colors.body;
+            header.style.backgroundColor = colors.principal;
+            header.style.color = colors.mainText;
+            main.style.backgroundColor = colors.container;
+            main.style.borderColor = colors.border;
+            main.style.color = colors.mainText;
+            footer.style.backgroundColor = colors.container;
+            footer.style.color = colors.mainText;
+        }
+
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+
+            if (isDarkMode) {
+                applyTheme(darkColors);
+            } else {
+                applyTheme(lightColors);
+            }
+        }
+        applyTheme(darkColors);
+        //applyTheme(lightColors);
+
+    </script>
+  </body>
+</html>
