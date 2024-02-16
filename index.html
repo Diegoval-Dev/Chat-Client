@@ -41,7 +41,7 @@
         main.style = 'display: flex; justify-content: end; align-items: end; flex-direction: column; height: 50%; width:50%; border: 5px solid; border-radius: 10px; margin: 10px;';
         footer.style = 'height: 10%; width:100%; text-align: center; display: flex; justify-content: center; align-items: center;';
 
-        buttonToggleTheme.innerText = '🌙';
+        
         buttonToggleTheme.style = 'height: 50px; width: 50px; border: none; border-radius: 5px; cursor: pointer; font-size: 1.2em;';
 
         writeContainer.style = 'display: flex; justify-content: space-between; align-items: center; height: 60px; width:100%; gap: 2%; padding: 7px; margin: 0; box-sizing: border-box;';
@@ -103,17 +103,21 @@
 
             if (isDarkMode) {
                 applyTheme(darkColors);
+                buttonToggleTheme.innerText = '☀️';
             } else {
                 applyTheme(lightColors);
+                buttonToggleTheme.innerText = '🌙';
             }
 
             localStorage.setItem('darkMode', isDarkMode);
         }
-        
+
         if (isDarkMode) {
             applyTheme(darkColors);
+            buttonToggleTheme.innerText = '☀️';
         } else {
             applyTheme(lightColors);
+            buttonToggleTheme.innerText = '🌙';
         }
 
         buttonToggleTheme.addEventListener('click', toggleTheme);
