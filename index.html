@@ -10,6 +10,7 @@
             text: '#697477',
             mainText: '#000',
             principal: '#1083d6',
+            ligth: '#a0a7ac'
         };
         const darkColors = {
             body: '#192229',
@@ -18,24 +19,67 @@
             text: '#c8cdd0',
             mainText: '#eff3f5',
             principal: '#52a5e0',
+            ligth: '#a0a7ac'
 
         };
-        let isDarkMode = false;
+
+        const storedDarkMode = localStorage.getItem('darkMode');
+        let isDarkMode = (storedDarkMode === 'true');   
         const header = document.createElement('header');
         const main = document.createElement('main');
         const footer = document.createElement('footer');
         const body = document.body;
+        const writeContainer = document.createElement('form');
+        const inputMessage = document.createElement('input');
+        const buttonSend = document.createElement('input');
+        const buttonToggleTheme = document.createElement('button');
+
+
         header.innerHTML = '<h1>Arpanetos Chat</h1>';
-        main.innerHTML = '';
-        footer.innerHTML = '<h1>Footer</h1>';
         header.style = 'height: 10%; width:100%; text-align: center; ';
         body.style = 'margin: 0; padding: 0; display: flex; flex-direction: column; align-items:center; justify-content: space-between; height: 100vh;';
-        main.style = 'display: flex; justify-content: center; align-items: center; height: 50%; width:50%; border: 5px solid; border-radius: 10px; margin: 10px;';
-        footer.style = 'height: 10%; width:100%; text-align: center;';
+        main.style = 'display: flex; justify-content: end; align-items: end; flex-direction: column; height: 50%; width:50%; border: 5px solid; border-radius: 10px; margin: 10px;';
+        footer.style = 'height: 10%; width:100%; text-align: center; display: flex; justify-content: center; align-items: center;';
+
+        buttonToggleTheme.innerText = '🌙';
+        buttonToggleTheme.style = 'height: 50px; width: 50px; border: none; border-radius: 5px; cursor: pointer; font-size: 1.2em;';
+
+        writeContainer.style = 'display: flex; justify-content: space-between; align-items: center; height: 60px; width:100%; gap: 2%; padding: 7px; margin: 0; box-sizing: border-box;';
+
+        inputMessage.style = 'height: 100%; width: 80%; padding: 10px; border: none; border-radius: 5px;';
+
+        buttonSend.type = 'submit';
+        buttonSend.style = 'height: 100%; width: 20%; border: none; border-radius: 5px; cursor: pointer; font-size: 1.2em;';
+        buttonSend.innerText = 'Send';
+
+
         document.body.appendChild(header);
+        writeContainer.appendChild(inputMessage);
+        writeContainer.appendChild(buttonSend);
+        main.appendChild(writeContainer);
         document.body.appendChild(main);
+        footer.appendChild(buttonToggleTheme);
         document.body.appendChild(footer);
 
+
+        inputMessage.addEventListener('mouseenter', () => {
+            inputMessage.style.opacity = '0.8';
+        });
+        inputMessage.addEventListener('mouseleave', () => {
+            inputMessage.style.opacity = '1.0';
+        });
+
+        buttonSend.addEventListener('mouseenter', () => {
+            buttonSend.style.opacity = '0.8';
+        });
+
+        buttonSend.addEventListener('mouseleave', () => {
+            buttonSend.style.opacity = '1.0';
+        });
+
+        buttonSend.addEventListener('click', () => {
+            alert('Mensaje enviado');
+        });
 
         function applyTheme(colors) {
             body.style.backgroundColor = colors.body;
@@ -44,8 +88,14 @@
             main.style.backgroundColor = colors.container;
             main.style.borderColor = colors.border;
             main.style.color = colors.mainText;
+            writeContainer.style.backgroundColor = colors.container;
+            inputMessage.style.backgroundColor = colors.ligth;
+            buttonSend.style.backgroundColor = colors.principal;
+            buttonSend.style.color = colors.mainText;
+            buttonToggleTheme.style.backgroundColor = colors.ligth;
             footer.style.backgroundColor = colors.container;
             footer.style.color = colors.mainText;
+
         }
 
         function toggleTheme() {
@@ -56,9 +106,17 @@
             } else {
                 applyTheme(lightColors);
             }
+
+            localStorage.setItem('darkMode', isDarkMode);
         }
-        applyTheme(darkColors);
-        //applyTheme(lightColors);
+        
+        if (isDarkMode) {
+            applyTheme(darkColors);
+        } else {
+            applyTheme(lightColors);
+        }
+
+        buttonToggleTheme.addEventListener('click', toggleTheme);
 
     </script>
   </body>
