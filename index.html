@@ -9,7 +9,7 @@
             border: '#eff3f5',
             text: '#697477',
             mainText: '#000',
-            principal: '#1083d6',
+            principal: '#52a5e0',
             ligth: '#a0a7ac'
         };
         const darkColors = {
@@ -18,7 +18,7 @@
             border: '#2a3b47',
             text: '#c8cdd0',
             mainText: '#eff3f5',
-            principal: '#52a5e0',
+            principal: '#0a5d99',
             ligth: '#a0a7ac'
 
         };
@@ -55,7 +55,8 @@
         buttonSend.style = 'height: 100%; width: 20%; border: none; border-radius: 5px; cursor: pointer; font-size: 1.2em;';
         buttonSend.innerText = 'Send';
 
-        messagesContainer.style = 'display: flex; flex-direction: column; gap: 5px; padding: 5px; height: 85%; width: 100%; border-radius: 5px;';
+        messagesContainer.style = 'display: flex; flex-direction: column; gap: 5px; padding: 5px; max-height: 85%; width: 100%; border-radius: 5px; padding: 5px; overflow-y: auto; box-sizing: border-box; overflow: auto; ';
+        messagesContainer.classList.add('messages-container');
 
         document.body.appendChild(header);
         writeContainer.appendChild(inputMessage);
@@ -103,7 +104,6 @@
             menssagesContainer = document.querySelectorAll('.message-container');
             menssagesContainer.forEach(message => {
                 message.style.backgroundColor = colors.principal;
-                message.style.borderColor = colors.border;
                 message.style.color = colors.mainText;
             });
         }
@@ -134,10 +134,13 @@
 
         document.addEventListener('DOMContentLoaded', async function() {
             const messages = await loadMessages();
+
             console.log(messages);
-            messages.forEach(message => {
-            createMessage(message.username, message.message, message.created_at);
-            });
+
+            for (let i = messages.length - 1; i >= 0; i--) {
+                const message = messages[i];
+                createMessage(message.username, message.message, message.created_at);
+            }
         });
 
         function loadMessages() {
@@ -166,17 +169,28 @@
             const messageText = document.createElement('p');
             const messageDate = document.createElement('p');
             messageContainer.classList.add('message-container');
-            messageContainer.style = 'display: flex; flex-direction: column; gap: 5px; padding: 5px; border-radius: 5px;';
-            messageUsername.style = 'font-weight: bold; font-size: 1.2em; margin: 0; padding: 0;';
-            messageText.style = 'margin: 0; padding: 0;';
-            messageDate.style = 'font-size: 0.8em; margin: 0; padding: 0;';
+            messageContainer.style = 'display: flex; flex-direction: column; padding: 5px; border-radius: 5px;';
+            messageUsername.style = 'font-weight: bold; font-size: 1.2em; margin: 0; padding: 0; text-align: start;';
+            messageText.style = 'margin: 0; padding: 0; text-align: center;';
+            messageDate.style = 'font-size: 0.8em; margin: 0; padding: 0; text-align: end;';
             messageUsername.innerText = username;
             messageText.innerText = message;
             messageDate.innerText = date;
+            
+            if (isDarkMode) {
+                messageContainer.style.backgroundColor = darkColors.principal;
+                messageContainer.style.color = darkColors.mainText;
+            } else {
+                messageContainer.style.backgroundColor = lightColors.principal;
+                messageContainer.style.color = lightColors.mainText;
+            }
+
             messageContainer.appendChild(messageUsername);
             messageContainer.appendChild(messageText);
             messageContainer.appendChild(messageDate);
             messagesContainer.appendChild(messageContainer);
+
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
 
