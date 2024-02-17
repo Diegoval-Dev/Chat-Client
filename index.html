@@ -26,17 +26,20 @@
         const storedDarkMode = localStorage.getItem('darkMode');
         let isDarkMode = (storedDarkMode === 'true');   
         const header = document.createElement('header');
+        const h1 = document.createElement('h1');     
         const main = document.createElement('main');
         const footer = document.createElement('footer');
         const body = document.body;
+        const messagesContainer = document.createElement('div');
         const writeContainer = document.createElement('form');
         const inputMessage = document.createElement('input');
         const buttonSend = document.createElement('input');
         const buttonToggleTheme = document.createElement('button');
 
-
-        header.innerHTML = '<h1>Arpanetos Chat</h1>';
-        header.style = 'height: 10%; width:100%; text-align: center; ';
+        h1.innerText = 'Arpanetos Chat';
+        h1.style = 'font-size: 2.2em; margin: 0; padding: 0;  font-family: "Arial", sans-serif; font-weight: bold; text-align: center; text-transform: uppercase; letter-spacing: 0.2';
+        header.appendChild(h1);
+        header.style = 'height: 10%; width:100%; text-align: center; display: flex; justify-content: center; align-items: center;';
         body.style = 'margin: 0; padding: 0; display: flex; flex-direction: column; align-items:center; justify-content: space-between; height: 100vh;';
         main.style = 'display: flex; justify-content: end; align-items: end; flex-direction: column; height: 50%; width:50%; border: 5px solid; border-radius: 10px; margin: 10px;';
         footer.style = 'height: 10%; width:100%; text-align: center; display: flex; justify-content: center; align-items: center;';
@@ -44,7 +47,7 @@
         
         buttonToggleTheme.style = 'height: 50px; width: 50px; border: none; border-radius: 5px; cursor: pointer; font-size: 1.2em;';
 
-        writeContainer.style = 'display: flex; justify-content: space-between; align-items: center; height: 60px; width:100%; gap: 2%; padding: 7px; margin: 0; box-sizing: border-box;';
+        writeContainer.style = 'display: flex; justify-content: space-between; align-items: center; height: 15%; width:100%; gap: 2%; padding: 7px; margin: 0; box-sizing: border-box;';
 
         inputMessage.style = 'height: 100%; width: 80%; padding: 10px; border: none; border-radius: 5px;';
 
@@ -52,10 +55,12 @@
         buttonSend.style = 'height: 100%; width: 20%; border: none; border-radius: 5px; cursor: pointer; font-size: 1.2em;';
         buttonSend.innerText = 'Send';
 
+        messagesContainer.style = 'display: flex; flex-direction: column; gap: 5px; padding: 5px; height: 85%; width: 100%; border-radius: 5px;';
 
         document.body.appendChild(header);
         writeContainer.appendChild(inputMessage);
         writeContainer.appendChild(buttonSend);
+        main.appendChild(messagesContainer);
         main.appendChild(writeContainer);
         document.body.appendChild(main);
         footer.appendChild(buttonToggleTheme);
@@ -95,7 +100,12 @@
             buttonToggleTheme.style.backgroundColor = colors.ligth;
             footer.style.backgroundColor = colors.container;
             footer.style.color = colors.mainText;
-
+            menssagesContainer = document.querySelectorAll('.message-container');
+            menssagesContainer.forEach(message => {
+                message.style.backgroundColor = colors.principal;
+                message.style.borderColor = colors.border;
+                message.style.color = colors.mainText;
+            });
         }
 
         function toggleTheme() {
@@ -121,6 +131,54 @@
         }
 
         buttonToggleTheme.addEventListener('click', toggleTheme);
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            const messages = await loadMessages();
+            console.log(messages);
+            messages.forEach(message => {
+            createMessage(message.username, message.message, message.created_at);
+            });
+        });
+
+        function loadMessages() {
+            const url = 'http://localhost:3009/messages';
+            const options = {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+            return fetch(url, options)
+                .then(response => {
+                    if(!response.ok) {
+                        throw new Error('Error al obtener los mensajes');
+                    }
+                    return response.json();
+                })
+                .catch(error => {
+                    console.error('Error', error);
+                });
+        }
+
+        function createMessage(username, message, date){
+            const messageContainer = document.createElement('div');
+            const messageUsername = document.createElement('p');
+            const messageText = document.createElement('p');
+            const messageDate = document.createElement('p');
+            messageContainer.classList.add('message-container');
+            messageContainer.style = 'display: flex; flex-direction: column; gap: 5px; padding: 5px; border-radius: 5px;';
+            messageUsername.style = 'font-weight: bold; font-size: 1.2em; margin: 0; padding: 0;';
+            messageText.style = 'margin: 0; padding: 0;';
+            messageDate.style = 'font-size: 0.8em; margin: 0; padding: 0;';
+            messageUsername.innerText = username;
+            messageText.innerText = message;
+            messageDate.innerText = date;
+            messageContainer.appendChild(messageUsername);
+            messageContainer.appendChild(messageText);
+            messageContainer.appendChild(messageDate);
+            messagesContainer.appendChild(messageContainer);
+        }
+
 
     </script>
   </body>
