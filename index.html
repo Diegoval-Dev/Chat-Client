@@ -10,7 +10,7 @@
             text: '#697477',
             mainText: '#000',
             principal: '#52a5e0',
-            ligth: '#a0a7ac'
+            ligth: '#c3cdd5'
         };
         const darkColors = {
             body: '#192229',
@@ -19,7 +19,7 @@
             text: '#c8cdd0',
             mainText: '#eff3f5',
             principal: '#0a5d99',
-            ligth: '#a0a7ac'
+            ligth: '#c3cdd5'
 
         };
 
@@ -49,12 +49,14 @@
             localStorage.setItem('username', usernameInput.value);
         });
 
+
+
         h1.innerText = 'Arpanetos Chat';
-        h1.style = 'font-size: 2.2em; margin: 0; padding: 0;  font-family: "Arial", sans-serif; font-weight: bold; text-align: center; text-transform: uppercase; letter-spacing: 0.2';
+        h1.style = ' margin: 0; padding: 0;  font-family: "Arial", sans-serif; font-weight: bold; text-align: center; text-transform: uppercase; letter-spacing: 0.2';
         header.appendChild(h1);
         header.style = 'height: 10%; width:100%; text-align: center; display: flex; justify-content: center; align-items: center;';
         body.style = 'margin: 0; padding: 0; display: flex; flex-direction: column; align-items:center; justify-content: space-between; height: 100vh;';
-        main.style = 'display: flex; justify-content: end; align-items: end; flex-direction: column; height: 70%; width:50%; border: 5px solid; border-radius: 10px; padding: 10px; ';
+        main.style = 'display: flex; justify-content: end; align-items: end; flex-direction: column; height: 70%;  border: 5px solid; border-radius: 10px; padding: 10px; ';
         footer.style = 'height: 10%; width:100%; text-align: center; display: flex; justify-content: center; align-items: center;';
 
         
@@ -118,6 +120,7 @@
             buttonToggleTheme.style.backgroundColor = colors.ligth;
             footer.style.backgroundColor = colors.container;
             footer.style.color = colors.mainText;
+            usernameInput.style.backgroundColor = colors.ligth;
             menssagesContainer = document.querySelectorAll('.message-container');
             menssagesContainer.forEach(message => {
                 message.style.backgroundColor = colors.principal;
@@ -151,6 +154,7 @@
 
         document.addEventListener('DOMContentLoaded', async function() {
             load();
+            responsive()
         });
 
         function load(){
@@ -251,6 +255,24 @@
             throw new Error('El mensaje no puede tener más de 140 caracteres.');
         }
     }
+
+
+    function responsive(){
+        if (window.innerWidth <= 768) {
+                main.style.width = '95%';
+                buttonSend.innerText = '>';
+                h1.style.fontSize = '1.5em';
+            } else {
+                main.style.width = '50%';
+                buttonSend.innerText = 'Enviar';
+                h1.style.fontSize = '2em';
+            }
+    }
+
+    window.addEventListener('resize', () => {
+        responsive();
+    });
+
 
     </script>
   </body>
