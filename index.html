@@ -24,6 +24,7 @@
         };
 
         const storedDarkMode = localStorage.getItem('darkMode');
+        const username = localStorage.getItem('username');
         let isDarkMode = (storedDarkMode === 'true');   
         const header = document.createElement('header');
         const h1 = document.createElement('h1');     
@@ -35,13 +36,25 @@
         const inputMessage = document.createElement('input');
         const buttonSend = document.createElement('button');
         const buttonToggleTheme = document.createElement('button');
+        const usernameInput = document.createElement('input');
+        const usernameTitel = document.createElement('h2');
+
+        if (username) {
+            usernameInput.value = username;
+        } else {
+            usernameInput.value = '';
+        }
+
+        usernameInput.addEventListener('input', () => {
+            localStorage.setItem('username', usernameInput.value);
+        });
 
         h1.innerText = 'Arpanetos Chat';
         h1.style = 'font-size: 2.2em; margin: 0; padding: 0;  font-family: "Arial", sans-serif; font-weight: bold; text-align: center; text-transform: uppercase; letter-spacing: 0.2';
         header.appendChild(h1);
         header.style = 'height: 10%; width:100%; text-align: center; display: flex; justify-content: center; align-items: center;';
         body.style = 'margin: 0; padding: 0; display: flex; flex-direction: column; align-items:center; justify-content: space-between; height: 100vh;';
-        main.style = 'display: flex; justify-content: end; align-items: end; flex-direction: column; height: 50%; width:50%; border: 5px solid; border-radius: 10px; margin: 10px;';
+        main.style = 'display: flex; justify-content: end; align-items: end; flex-direction: column; height: 70%; width:50%; border: 5px solid; border-radius: 10px; padding: 10px; ';
         footer.style = 'height: 10%; width:100%; text-align: center; display: flex; justify-content: center; align-items: center;';
 
         
@@ -57,9 +70,17 @@
         messagesContainer.style = 'display: flex; flex-direction: column; gap: 5px; padding: 5px; max-height: 85%; width: 100%; border-radius: 5px; padding: 5px; overflow-y: auto; box-sizing: border-box; overflow: auto; ';
         messagesContainer.classList.add('messages-container');
 
+        usernameTitel.style = 'font-size: 1.2em; margin: 0; padding: 0; text-align: start; width: 100%; margin-top: 10px;';
+        usernameTitel.innerText = 'Nombre de usuario';
+
+        usernameInput.style = 'height: 30px; width: 100%; padding: 10px; border: none; border-radius: 5px; margin: 10px 0; box-sizing: border-box;';
+        usernameInput.placeholder = 'Ingrese su nombre de usuario';
+
         document.body.appendChild(header);
         writeContainer.appendChild(inputMessage);
         writeContainer.appendChild(buttonSend);
+        main.appendChild(usernameTitel);
+        main.appendChild(usernameInput);
         main.appendChild(messagesContainer);
         main.appendChild(writeContainer);
         document.body.appendChild(main);
@@ -198,8 +219,8 @@
         buttonSend.addEventListener('click', async function(event) {
         event.preventDefault();
         const message = inputMessage.value;
-        const username = 'Arpanetos';
-        validator(message);
+        const username = usernameInput.value;
+        validator(message,username);
         const url = 'http://localhost:3009/messages';
         const options = {
             method: 'POST',
@@ -215,7 +236,11 @@
         }
     });
 
-    function validator(message){
+    function validator(message, username){
+        if (username.length === 0) {
+            alert("El nombre de usuario no puede estar vacío.");
+            throw new Error('El nombre de usuario no puede estar vacío.');
+        }
         if (message.length === 0) {
             alert("El mensaje no puede estar vacío.");
             throw new Error('El mensaje no puede estar vacío.');
