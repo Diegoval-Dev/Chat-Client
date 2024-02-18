@@ -33,7 +33,7 @@
         const messagesContainer = document.createElement('div');
         const writeContainer = document.createElement('form');
         const inputMessage = document.createElement('input');
-        const buttonSend = document.createElement('input');
+        const buttonSend = document.createElement('button');
         const buttonToggleTheme = document.createElement('button');
 
         h1.innerText = 'Arpanetos Chat';
@@ -51,9 +51,8 @@
 
         inputMessage.style = 'height: 100%; width: 80%; padding: 10px; border: none; border-radius: 5px;';
 
-        buttonSend.type = 'submit';
         buttonSend.style = 'height: 100%; width: 20%; border: none; border-radius: 5px; cursor: pointer; font-size: 1.2em;';
-        buttonSend.innerText = 'Send';
+        buttonSend.innerText = 'Enviar';
 
         messagesContainer.style = 'display: flex; flex-direction: column; gap: 5px; padding: 5px; max-height: 85%; width: 100%; border-radius: 5px; padding: 5px; overflow-y: auto; box-sizing: border-box; overflow: auto; ';
         messagesContainer.classList.add('messages-container');
@@ -83,9 +82,6 @@
             buttonSend.style.opacity = '1.0';
         });
 
-        buttonSend.addEventListener('click', () => {
-            alert('Mensaje enviado');
-        });
 
         function applyTheme(colors) {
             body.style.backgroundColor = colors.body;
@@ -133,17 +129,15 @@
         buttonToggleTheme.addEventListener('click', toggleTheme);
 
         document.addEventListener('DOMContentLoaded', async function() {
-            const messages = await loadMessages();
-
-            console.log(messages);
-
-            for (let i = messages.length - 1; i >= 0; i--) {
-                const message = messages[i];
-                createMessage(message.username, message.message, message.created_at);
-            }
+            load();
         });
 
-        function loadMessages() {
+        function load(){
+            loadMessages();
+            setInterval(loadMessages, 6000);
+        }
+
+        function getMessages(){
             const url = 'http://localhost:3009/messages';
             const options = {
                 method: 'GET',
@@ -161,6 +155,14 @@
                 .catch(error => {
                     console.error('Error', error);
                 });
+        }
+
+        async function loadMessages() {
+            const messages = await getMessages();
+            for (let i = messages.length - 1; i >= 0; i--) {
+                const message = messages[i];
+                createMessage(message.username, message.message, message.created_at);
+        }
         }
 
         function createMessage(username, message, date){
@@ -193,6 +195,37 @@
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
+        buttonSend.addEventListener('click', async function(event) {
+        event.preventDefault();
+        const message = inputMessage.value;
+        const username = 'Arpanetos';
+        validator(message);
+        const url = 'http://localhost:3009/messages';
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, message })
+        };
+        const response = await fetch(url, options);
+        if (response.ok) {
+            createMessage(username, message, new Date().toLocaleString());
+            inputMessage.value = '';
+        }
+    });
+
+    function validator(message){
+        if (message.length === 0) {
+            alert("El mensaje no puede estar vacío.");
+            throw new Error('El mensaje no puede estar vacío.');
+            
+        }
+        if (message.length > 140) {
+            alert("El mensaje no puede tener más de 140 caracteres.");
+            throw new Error('El mensaje no puede tener más de 140 caracteres.');
+        }
+    }
 
     </script>
   </body>
