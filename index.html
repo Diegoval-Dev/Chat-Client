@@ -163,7 +163,7 @@
         }
 
         function getMessages(){
-            const url = 'http://localhost:3009/messages';
+            const url = 'https://chat.arpanetos.lol/messages';
             const options = {
                 method: 'GET',
                 headers: {
@@ -240,7 +240,7 @@
     });
 
     async function sendMessage(message, username){
-        const url = 'http://localhost:3009/messages';
+        const url = 'https://chat.arpanetos.lol/messages';
         const options = {
             method: 'POST',
             headers: {
