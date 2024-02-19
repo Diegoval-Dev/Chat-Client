@@ -133,10 +133,10 @@
 
             if (isDarkMode) {
                 applyTheme(darkColors);
-                buttonToggleTheme.innerText = '☀️';
+                buttonToggleTheme.innerHTML = '&#127774';
             } else {
                 applyTheme(lightColors);
-                buttonToggleTheme.innerText = '🌙';
+                buttonToggleTheme.innerHTML = '&#127769';
             }
 
             localStorage.setItem('darkMode', isDarkMode);
@@ -144,10 +144,10 @@
 
         if (isDarkMode) {
             applyTheme(darkColors);
-            buttonToggleTheme.innerText = '☀️';
+            buttonToggleTheme.innerHTML = '&#127774';
         } else {
             applyTheme(lightColors);
-            buttonToggleTheme.innerText = '🌙';
+            buttonToggleTheme.innerHTML = '&#127769';
         }
 
         buttonToggleTheme.addEventListener('click', toggleTheme);
